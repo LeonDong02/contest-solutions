@@ -1,0 +1,6 @@
+n = int(input())
+energy = list(map(int, input().split()))
+log = list(map(int, input().split()))
+energy.sort()
+log.sort(reverse=True)
+print(sum(energy[i]*log[i] for i in range(n)))
