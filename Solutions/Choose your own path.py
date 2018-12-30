@@ -1,32 +1,38 @@
-import math
+from collections import deque
 
 
-def dijkstra(s, prev):
-    global distance
-    if math.isinf(distance[s - 1]):
-        if distance[s - 1] > prev + 1:
-            distance[s - 1] = prev + 1
-        if graph[s]:
-            for i in graph[s]:
-                dijkstra(i, distance[s - 1])
-    elif distance[s - 1] > prev + 1:
-        distance[s - 1] = prev + 1
+def connected(x):
+    if x not in visited:
+        visited.append(x)
+        if graph[x]:
+            for i in graph[x]:
+                connected(i)
+
+
+def distance(x):
+    visited = [x]
+    level = [1 for i in range(len(graph) + 1)]
+    q = deque([x])
+    while q:
+        a = q.popleft()
+        if graph[a]:
+            for i in graph[a]:
+                if i not in visited:
+                    level[i] = level[a] + 1
+                    q.append(i)
+                    visited.append(i)
+        else:
+            return level[a]
 
 
 n = int(input())
-end = []
-distance = [math.inf for i in range(n)]
+visited = []
 graph = {}
 for i in range(1, n + 1):
     m = list(map(int, input().split()))
     graph[i] = []
-    if m[0] == 0:
-        end.append(i)
     for j in range(m[0]):
         graph[i].append(m[j + 1])
-dijkstra(1, 0)
-if all(not math.isinf(distance[i]) for i in range(n)):
-    print('Y')
-else:
-    print('N')
-print(min(distance[i - 1] for i in end))
+connected(1)
+print('Y' if len(visited) == n else 'N')
+print(distance(1))
