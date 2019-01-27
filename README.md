@@ -1,2 +1,2 @@
 # contest-solutions
-dmoj username: p1geon
+dmoj.ca/user/p1geon
