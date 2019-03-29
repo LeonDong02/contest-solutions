@@ -9,7 +9,7 @@ int a, b, c, d, t;
 int main(){
     cin >> a >> b >> c >> d >> t;
     int dis = abs(a - c) + abs(b - d);
-    if(dis <= t and !(t - dis) % 2){
+    if(dis <= t and !((t - dis) % 2)){
         cout << 'Y';
     }else{
         cout << 'N';
