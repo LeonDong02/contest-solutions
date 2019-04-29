@@ -9,7 +9,7 @@ int n, m;
 char nl;
 char grid[2001][2001];
 bool visited[2001][2001];
-int dfs(int x, int y){
+void dfs(int x, int y){
   int cur[2];
   int move[2];
   if(grid[x][y] == 'N'){
@@ -42,7 +42,6 @@ int dfs(int x, int y){
   }
   cout << "(" << x << "," << y << ")" << "\n";
   visited[x][y] = true;
-  return 0;
 }
 
 int main() {
