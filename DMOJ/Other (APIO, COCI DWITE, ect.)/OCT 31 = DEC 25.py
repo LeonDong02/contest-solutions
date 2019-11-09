@@ -1,0 +1,8 @@
+c = input()
+if c == 'Sunday': print('Monday')
+elif c == 'Monday': print('Tuesday')
+elif c == 'Tuesday': print('Wednesday')
+elif c == 'Wednesday': print('Thursday')
+elif c == 'Thursday': print('Friday')
+elif c == 'Friday': print('Saturday')
+elif c == 'Saturday': print('Sunday')
