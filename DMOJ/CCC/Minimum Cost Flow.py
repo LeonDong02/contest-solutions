@@ -1,63 +1,52 @@
 import sys
+input = sys.stdin.readline
 
 
-def input():
-    return sys.stdin.readline().strip()
-
-
-def kruskal():
-    mst = []
-    parent = [i for i in range(n + 1)]
-    rank = [1 for _ in range(n + 1)]
-
-    def get_parent(x):
-        if x != parent[x]:
-            parent[x] = get_parent(parent[x])
-        return parent[x]
-
-    c = 0
-    for edge in edges:
-        xroot = get_parent(edge[1])
-        yroot = get_parent(edge[2])
-        if xroot != yroot:
-            if rank[xroot] > rank[yroot]:
-                parent[yroot] = xroot
-            elif rank[yroot] > rank[xroot]:
-                parent[xroot] = yroot
-            else:
-                parent[xroot] = yroot
-                rank[yroot] += 1
-            mst.append(edge)
-            if not edge[3]:
-                c += 1
-    if not mst[-1][3]:
-        parent = [i for i in range(n + 1)]
-        rank = [1 for _ in range(n + 1)]
-        for edge in edges:
-            xroot = get_parent(edge[1])
-            yroot = get_parent(edge[2])
-            if xroot != yroot:
-                if edge[0] < mst[-1][0] or (edge[0] == mst[-1][0] and edge[3]):
-                    if rank[xroot] > rank[yroot]:
-                        parent[yroot] = xroot
-                    elif rank[yroot] > rank[xroot]:
-                        parent[xroot] = yroot
-                    else:
-                        parent[xroot] = yroot
-                        rank[yroot] += 1
-                elif edge[3] and edge[0] <= d:
-                    c -= 1
-                    return c
-    return c
+def gp(x):
+    while x != p[x]:
+        x = p[x]
+    return x
 
 
 n, m, d = map(int, input().split())
 edges = []
-for i in range(n - 1):
+for _ in range(n - 1):
     a, b, c = map(int, input().split())
-    edges.append([c, a, b, True])
-for i in range(m + 1 - n):
+    edges.append([a, b, c, 0])
+for _ in range(m - n + 1):
     a, b, c = map(int, input().split())
-    edges.append([c, a, b, False])
-edges.sort(key=lambda x: x[0])
-print(kruskal())
+    edges.append([a, b, c, 1])
+edges.sort(key=lambda x: x[2])
+p = [i for i in range(n + 1)]
+r = [1 for _ in range(n + 1)]
+mst = []
+for edge in edges:
+    a, b = gp(edge[0]), gp(edge[1])
+    if a != b:
+        if r[a] > r[b]:
+            p[b] = a
+        elif r[b] > r[a]:
+            p[a] = b
+        else:
+            p[a] = b
+            r[b] += 1
+        mst.append(edge)
+ans = sum(mst[i][3] for i in range(n - 1))
+if mst[-1][3] and d:
+    p = [i for i in range(n + 1)]
+    r = [1 for i in range(n + 1)]
+    for edge in edges:
+        a, b = gp(edge[0]), gp(edge[1])
+        if a != b:
+            if edge[2] < mst[-1][2] or (edge[2] == mst[-1][2] and not edge[3]):
+                if r[a] > r[b]:
+                    p[b] = a
+                elif r[b] > r[a]:
+                    p[a] = b
+                else:
+                    p[a] = b
+                    r[b] += 1
+            elif not edge[3] and edge[2] <= d:
+                ans -= 1
+                break
+print(ans)
